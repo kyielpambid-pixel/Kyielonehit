@@ -1,5 +1,5 @@
--- KYIEL ONE HIT - KEYLOCKED VERSION
--- Users need the key to use the script
+-- KYIEL ONE HIT - DRAGGABLE BUTTON
+-- Load with: loadstring(game:HttpGet("YOUR_URL"))()
 
 (function()
     -- Protection
@@ -10,273 +10,138 @@
     local LocalPlayer = Players.LocalPlayer
     local active = false
     
-    -- THE SECRET KEY (change this to whatever you want)
-    local requiredKey = "F30995186908109077563811n4ek"
-    local keyEntered = false
+    -- GUI
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.ResetOnSpawn = false
+    screenGui.Parent = game.CoreGui
     
-    -- Create KEY INPUT GUI
-    local keyGui = Instance.new("ScreenGui")
-    keyGui.ResetOnSpawn = false
-    keyGui.Parent = game.CoreGui
-    keyGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    -- Button
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 200, 0, 85)
+    button.Position = UDim2.new(0.5, -100, 0.5, -42)
+    button.BackgroundColor3 = Color3.fromRGB(20, 30, 45)
+    button.BorderSizePixel = 2
+    button.BorderColor3 = Color3.fromRGB(0, 200, 255)
+    button.Text = ""
+    button.Parent = screenGui
     
-    -- Main key popup frame
-    local keyFrame = Instance.new("Frame")
-    keyFrame.Size = UDim2.new(0, 350, 0, 200)
-    keyFrame.Position = UDim2.new(0.5, -175, 0.5, -100)
-    keyFrame.BackgroundColor3 = Color3.fromRGB(20, 25, 40)
-    keyFrame.BackgroundTransparency = 0.05
-    keyFrame.BorderSizePixel = 2
-    keyFrame.BorderColor3 = Color3.fromRGB(0, 200, 255)
-    keyFrame.Parent = keyGui
+    -- Corner
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 25)
+    corner.Parent = button
     
-    local keyCorner = Instance.new("UICorner")
-    keyCorner.CornerRadius = UDim.new(0, 15)
-    keyCorner.Parent = keyFrame
+    -- Layout
+    local layout = Instance.new("UIListLayout")
+    layout.Parent = button
+    layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    layout.VerticalAlignment = Enum.VerticalAlignment.Center
+    layout.Padding = UDim.new(0, 5)
     
     -- Title
-    local keyTitle = Instance.new("TextLabel")
-    keyTitle.Size = UDim2.new(1, 0, 0, 40)
-    keyTitle.Position = UDim2.new(0, 0, 0, 10)
-    keyTitle.BackgroundTransparency = 1
-    keyTitle.Text = "🔐 KYIEL ONE HIT 🔐"
-    keyTitle.TextColor3 = Color3.fromRGB(0, 230, 255)
-    keyTitle.Font = Enum.Font.GothamBold
-    keyTitle.TextSize = 20
-    keyTitle.Parent = keyFrame
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, 0, 0, 35)
+    title.BackgroundTransparency = 1
+    title.Text = "KYIEL ONE HIT"
+    title.TextColor3 = Color3.fromRGB(0, 230, 255)
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 22
+    title.Parent = button
     
-    -- Subtitle
-    local keySub = Instance.new("TextLabel")
-    keySub.Size = UDim2.new(1, 0, 0, 25)
-    keySub.Position = UDim2.new(0, 0, 0, 50)
-    keySub.BackgroundTransparency = 1
-    keySub.Text = "Enter your license key to continue"
-    keySub.TextColor3 = Color3.fromRGB(150, 150, 150)
-    keySub.Font = Enum.Font.GothamMedium
-    keySub.TextSize = 12
-    keySub.Parent = keyFrame
+    -- Status
+    local status = Instance.new("TextLabel")
+    status.Size = UDim2.new(1, 0, 0, 20)
+    status.BackgroundTransparency = 1
+    status.Text = "⚡ READY ⚡"
+    status.TextColor3 = Color3.fromRGB(150, 150, 150)
+    status.Font = Enum.Font.GothamMedium
+    status.TextSize = 12
+    status.Parent = button
     
-    -- Key input box
-    local keyBox = Instance.new("TextBox")
-    keyBox.Size = UDim2.new(0.8, 0, 0, 40)
-    keyBox.Position = UDim2.new(0.1, 0, 0, 85)
-    keyBox.BackgroundColor3 = Color3.fromRGB(35, 40, 55)
-    keyBox.Text = ""
-    keyBox.PlaceholderText = "Enter key here..."
-    keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    keyBox.Font = Enum.Font.Gotham
-    keyBox.TextSize = 14
-    keyBox.Parent = keyFrame
+    -- ICE Badge
+    local ice = Instance.new("TextLabel")
+    ice.Size = UDim2.new(0, 45, 0, 22)
+    ice.Position = UDim2.new(1, -50, 0, 8)
+    ice.BackgroundColor3 = Color3.fromRGB(0, 120, 180)
+    ice.BackgroundTransparency = 0.3
+    ice.Text = "ICE"
+    ice.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ice.Font = Enum.Font.GothamBold
+    ice.TextSize = 11
+    local iceCorner = Instance.new("UICorner")
+    iceCorner.CornerRadius = UDim.new(0, 10)
+    iceCorner.Parent = ice
+    ice.Parent = button
     
-    local boxCorner = Instance.new("UICorner")
-    boxCorner.CornerRadius = UDim.new(0, 8)
-    boxCorner.Parent = keyBox
+    -- Hidden Key
+    local key = "F30995186908109077563811n4ek"
+    button:SetAttribute("Key", key)
     
-    -- Submit button
-    local submitBtn = Instance.new("TextButton")
-    submitBtn.Size = UDim2.new(0.8, 0, 0, 40)
-    submitBtn.Position = UDim2.new(0.1, 0, 0, 135)
-    submitBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 180)
-    submitBtn.Text = "SUBMIT KEY"
-    submitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    submitBtn.Font = Enum.Font.GothamBold
-    submitBtn.TextSize = 14
-    submitBtn.Parent = keyFrame
-    
-    local submitCorner = Instance.new("UICorner")
-    submitCorner.CornerRadius = UDim.new(0, 8)
-    submitCorner.Parent = submitBtn
-    
-    -- Error message
-    local errorMsg = Instance.new("TextLabel")
-    errorMsg.Size = UDim2.new(1, 0, 0, 20)
-    errorMsg.Position = UDim2.new(0, 0, 0, 180)
-    errorMsg.BackgroundTransparency = 1
-    errorMsg.Text = ""
-    errorMsg.TextColor3 = Color3.fromRGB(255, 80, 80)
-    errorMsg.Font = Enum.Font.GothamMedium
-    errorMsg.TextSize = 11
-    errorMsg.Parent = keyFrame
-    
-    -- MAIN BUTTON (hidden until key is correct)
-    local mainButton = nil
-    local mainGui = nil
-    
-    -- Function to load main script
-    function loadMainScript()
-        -- Destroy key GUI
-        keyGui:Destroy()
+    -- Toggle
+    button.MouseButton1Click:Connect(function()
+        local char = LocalPlayer.Character
+        if not char then return end
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
         
-        -- Create main GUI
-        mainGui = Instance.new("ScreenGui")
-        mainGui.ResetOnSpawn = false
-        mainGui.Parent = game.CoreGui
+        active = not active
         
-        mainButton = Instance.new("TextButton")
-        mainButton.Size = UDim2.new(0, 220, 0, 90)
-        mainButton.Position = UDim2.new(0.5, -110, 0.5, -45)
-        mainButton.BackgroundColor3 = Color3.fromRGB(20, 30, 45)
-        mainButton.BorderSizePixel = 2
-        mainButton.BorderColor3 = Color3.fromRGB(0, 200, 255)
-        mainButton.Text = ""
-        mainButton.Parent = mainGui
-        
-        local corner = Instance.new("UICorner")
-        corner.CornerRadius = UDim.new(0, 25)
-        corner.Parent = mainButton
-        
-        local layout = Instance.new("UIListLayout")
-        layout.Parent = mainButton
-        layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-        layout.VerticalAlignment = Enum.VerticalAlignment.Center
-        layout.Padding = UDim.new(0, 5)
-        
-        local title = Instance.new("TextLabel")
-        title.Size = UDim2.new(1, 0, 0, 35)
-        title.BackgroundTransparency = 1
-        title.Text = "KYIEL ONE HIT"
-        title.TextColor3 = Color3.fromRGB(0, 230, 255)
-        title.Font = Enum.Font.GothamBold
-        title.TextSize = 22
-        title.Parent = mainButton
-        
-        local status = Instance.new("TextLabel")
-        status.Size = UDim2.new(1, 0, 0, 20)
-        status.BackgroundTransparency = 1
-        status.Text = "⚡ READY ⚡"
-        status.TextColor3 = Color3.fromRGB(150, 150, 150)
-        status.Font = Enum.Font.GothamMedium
-        status.TextSize = 12
-        status.Parent = mainButton
-        
-        local subtitle = Instance.new("TextLabel")
-        subtitle.Size = UDim2.new(1, 0, 0, 18)
-        subtitle.BackgroundTransparency = 1
-        subtitle.Text = "❄️ COLD STORM ❄️"
-        subtitle.TextColor3 = Color3.fromRGB(100, 180, 220)
-        subtitle.Font = Enum.Font.Gotham
-        subtitle.TextSize = 10
-        subtitle.Parent = mainButton
-        
-        local ice = Instance.new("TextLabel")
-        ice.Size = UDim2.new(0, 45, 0, 22)
-        ice.Position = UDim2.new(1, -50, 0, 8)
-        ice.BackgroundColor3 = Color3.fromRGB(0, 120, 180)
-        ice.BackgroundTransparency = 0.3
-        ice.Text = "ICE"
-        ice.TextColor3 = Color3.fromRGB(255, 255, 255)
-        ice.Font = Enum.Font.GothamBold
-        ice.TextSize = 11
-        local iceCorner = Instance.new("UICorner")
-        iceCorner.CornerRadius = UDim.new(0, 10)
-        iceCorner.Parent = ice
-        ice.Parent = mainButton
-        
-        -- Toggle Function
-        mainButton.MouseButton1Click:Connect(function()
-            local char = LocalPlayer.Character
-            if not char then return end
-            local hrp = char:FindFirstChild("HumanoidRootPart")
-            if not hrp then return end
+        if active then
+            status.Text = "🔴 ACTIVE 🔴"
+            status.TextColor3 = Color3.fromRGB(255, 50, 50)
+            button.BackgroundColor3 = Color3.fromRGB(40, 20, 30)
+            button.BorderColor3 = Color3.fromRGB(255, 0, 100)
+            title.TextColor3 = Color3.fromRGB(255, 100, 150)
             
-            active = not active
-            
-            if active then
-                status.Text = "🔴 ACTIVE 🔴"
-                status.TextColor3 = Color3.fromRGB(255, 50, 50)
-                mainButton.BackgroundColor3 = Color3.fromRGB(40, 20, 30)
-                mainButton.BorderColor3 = Color3.fromRGB(255, 0, 100)
-                title.TextColor3 = Color3.fromRGB(255, 100, 150)
-                subtitle.Text = "💀 ONE HIT MODE 💀"
-                
-                task.spawn(function()
-                    while active do
-                        local checkChar = LocalPlayer.Character
-                        if not checkChar then break end
-                        local checkHrp = checkChar:FindFirstChild("HumanoidRootPart")
-                        if not checkHrp then break end
-                        local pos = checkHrp.Position
-                        checkHrp.CFrame = CFrame.new(pos.X, pos.Y - 795679695796326795679695796326, pos.Z)
-                        task.wait(0.01)
-                    end
-                end)
-            else
-                status.Text = "⚡ READY ⚡"
-                status.TextColor3 = Color3.fromRGB(150, 150, 150)
-                mainButton.BackgroundColor3 = Color3.fromRGB(20, 30, 45)
-                mainButton.BorderColor3 = Color3.fromRGB(0, 200, 255)
-                title.TextColor3 = Color3.fromRGB(0, 230, 255)
-                subtitle.Text = "❄️ COLD STORM ❄️"
-            end
-        end)
-        
-        -- DRAG SYSTEM
-        local dragging = false
-        local dragStart
-        local startPos
-        
-        mainButton.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-                dragging = true
-                dragStart = input.Position
-                startPos = mainButton.Position
-            end
-        end)
-        
-        mainButton.InputEnded:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-                dragging = false
-            end
-        end)
-        
-        UserInputService.InputChanged:Connect(function(input)
-            if dragging and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
-                local delta = input.Position - dragStart
-                mainButton.Position = UDim2.new(
-                    startPos.X.Scale,
-                    startPos.X.Offset + delta.X,
-                    startPos.Y.Scale,
-                    startPos.Y.Offset + delta.Y
-                )
-            end
-        end)
-        
-        print("✅ KYIEL ONE HIT | Key Verified - Script Loaded")
-    end
-    
-    -- Check key when submit button clicked
-    submitBtn.MouseButton1Click:Connect(function()
-        local enteredKey = keyBox.Text
-        
-        if enteredKey == requiredKey then
-            loadMainScript()
+            task.spawn(function()
+                while active do
+                    local checkChar = LocalPlayer.Character
+                    if not checkChar then break end
+                    local checkHrp = checkChar:FindFirstChild("HumanoidRootPart")
+                    if not checkHrp then break end
+                    local pos = checkHrp.Position
+                    checkHrp.CFrame = CFrame.new(pos.X, pos.Y - 795679695796326795679695796326, pos.Z)
+                    task.wait(0.01)
+                end
+            end)
         else
-            errorMsg.Text = "❌ Invalid Key! Access Denied"
-            keyBox.Text = ""
-            keyBox.PlaceholderText = "Wrong key, try again..."
-            
-            -- Shake animation for wrong key
-            local originalPos = keyFrame.Position
-            for i = 1, 4 do
-                keyFrame.Position = UDim2.new(0.5, -175 + (i % 2 == 0 and -10 or 10), 0.5, -100)
-            task.wait(0.03)
-            end
-            keyFrame.Position = originalPos
+            status.Text = "⚡ READY ⚡"
+            status.TextColor3 = Color3.fromRGB(150, 150, 150)
+            button.BackgroundColor3 = Color3.fromRGB(20, 30, 45)
+            button.BorderColor3 = Color3.fromRGB(0, 200, 255)
+            title.TextColor3 = Color3.fromRGB(0, 230, 255)
         end
     end)
     
-    -- Also allow pressing Enter in textbox
-    keyBox.FocusLost:Connect(function(enterPressed)
-        if enterPressed then
-            local enteredKey = keyBox.Text
-            if enteredKey == requiredKey then
-                loadMainScript()
-            else
-                errorMsg.Text = "❌ Invalid Key! Access Denied"
-                keyBox.Text = ""
-            end
+    -- DRAG SYSTEM
+    local dragging = false
+    local dragStart
+    local startPos
+    
+    button.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = button.Position
         end
     end)
     
-    print("🔐 KYIEL ONE HIT | Waiting for key...")
+    button.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
+    
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
+            local delta = input.Position - dragStart
+            button.Position = UDim2.new(
+                startPos.X.Scale,
+                startPos.X.Offset + delta.X,
+                startPos.Y.Scale,
+                startPos.Y.Offset + delta.Y
+            )
+        end
+    end)
+    
+    print("KYIEL ONE HIT LOADED | Key: " .. key)
 end)()
